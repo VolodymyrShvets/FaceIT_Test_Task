@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -74,9 +75,10 @@ public class JobsServiceImpl implements JobsService {
     public void saveJobs(List<Job> jobs) {
         log.info("Saving jobsList into database");
 
-        jobsRepository.saveAll(jobs);
+        List<Job> newJobs = jobs.stream().filter(job -> !jobsRepository.existsBySlug(job.getSlug())).toList();
+        jobsRepository.saveAll(newJobs);
 
-        log.info("Saving finished successfully");
+        log.info("Saving {} new elements finished successfully", newJobs.size());
     }
 
     @Override
