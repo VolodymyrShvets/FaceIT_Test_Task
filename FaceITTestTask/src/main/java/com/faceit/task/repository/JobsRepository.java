@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface JobsRepository extends JpaRepository<Job, Long> {
+    boolean existsBySlug(String slug);
+
     @Query("SELECT j.location, COUNT(*) FROM Job j GROUP BY j.location")
     List<Object[]> countJobsByLocation();
 
